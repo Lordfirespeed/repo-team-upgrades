@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+    <PropertyGroup>
+        <RepoDir>C:/Program Files (x86)/Steam/steamapps/common/REPO/</RepoDir>
+        <TestProfileDir>$(AppData)/r2modmanPlus-local/REPO/profiles/Test REPO Playground/</TestProfileDir>
+        <!-- for Linux:
+        <RepoDir>$(HOME)/.steam/debian-installation/steamapps/common/REPO/</RepoDir>
+        <TestProfileDir>$(HOME)/.config/r2modmanPlus-local/REPO/profiles/Test REPO Playground</TestProfileDir>
+        -->
+    </PropertyGroup>
+</Project>
