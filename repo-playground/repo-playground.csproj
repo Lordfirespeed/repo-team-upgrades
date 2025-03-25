@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <AssemblyName>dev.lordfirespeed.repo_playground</AssemblyName>
+        <Product>REPO Playground</Product>
+        <Description>'Playground' project for R.E.P.O.</Description>
+
+        <RootNamespace>RepoPlayground</RootNamespace>
+    </PropertyGroup>
+
+    <!-- make all references non-private, so they won't be copied to the output folder -->
+    <Target Name="ClearReferenceCopyLocalPaths" AfterTargets="ResolveAssemblyReferences">
+        <ItemGroup>
+            <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)"/>
+        </ItemGroup>
+    </Target>
+
+    <ItemGroup>
+        <PackageReference Include="BepInEx.Analyzers" Version="1.0.8" PrivateAssets="all"/>
+        <PackageReference Include="BepInEx.PluginInfoProps" Version="2.1.0" PrivateAssets="all"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="$(CI) != 'true'">
+        <Reference Include="Assembly-CSharp">
+            <HintPath>$(RepoDir)/REPO_Data/Managed/Assembly-CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="Assembly-CSharp-firstpass">
+            <HintPath>$(RepoDir)/REPO_Data/Managed/Assembly-CSharp-firstpass.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.Steamworks.Win64">
+            <HintPath>$(RepoDir)/REPO_Data/Managed/Facepunch.Steamworks.Win64.dll</HintPath>
+        </Reference>
+        <Reference Include="Newtonsoft.Json">
+            <HintPath>$(RepoDir)/REPO_Data/Managed/Newtonsoft.Json.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UI">
+            <HintPath>$(RepoDir)/REPO_Data/Managed/UnityEngine.UI.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TextMeshPro">
+            <HintPath>$(RepoDir)/REPO_Data/Managed/Unity.TextMeshPro.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.InputSystem">
+            <HintPath>$(RepoDir)/REPO_Data/Managed/Unity.InputSystem.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup Condition="$(CI) == 'true'">
+        <PackageReference Include="R.E.P.O.GameLibs.Steam" Version="0.1.2-ngd.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="BepInEx.Core" Version="5.4.21"/>
+        <PackageReference Include="UnityEngine.Modules" Version="2022.3.21"/>
+    </ItemGroup>
+
+</Project>
