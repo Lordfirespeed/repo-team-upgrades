@@ -1,0 +1,7 @@
+<Project>
+    <Target Name="SetPluginVersion" BeforeTargets="AddGeneratedFile" DependsOnTargets="MinVer">
+        <PropertyGroup>
+            <BepInExPluginVersion>$(MinVerMajor).$(MinVerMinor).$(MinVerPatch)</BepInExPluginVersion>
+        </PropertyGroup>
+    </Target>
+</Project>
