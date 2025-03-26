@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CommandLine;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -14,6 +15,22 @@ namespace RepoPlayground;
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 public class Plugin : BaseUnityPlugin
 {
+    static Plugin()
+    {
+        RootCommand rootCommand = new RootCommand {
+            TreatUnmatchedTokensAsErrors = false,
+        };
+        Option<FileInfo> versionDumpFileOption = new Option<FileInfo>(
+            aliases: ["--version-dump-file"]
+        );
+        rootCommand.AddOption(versionDumpFileOption);
+
+        var args = Environment.GetCommandLineArgs();
+        var result = rootCommand.Parse(args);
+        VersionDumpFile = result.GetValueForOption(versionDumpFileOption);
+    }
+
+    internal static FileInfo? VersionDumpFile { get; }
     internal static Plugin Instance { get; private set; } = null!;
     internal new static ManualLogSource Logger { get; private set; } = null!;
 
@@ -58,9 +75,13 @@ public class Plugin : BaseUnityPlugin
 
     private async Task DumpVersion(string versionString, CancellationToken ct)
     {
-        var pluginDirectory = Path.GetDirectoryName(Info.Location)!;
-        var versionDumpFile = Path.Combine(pluginDirectory, "version.txt");
-        await using var versionDumpStream = new StreamWriter(versionDumpFile);
+        var versionDumpFile = VersionDumpFile;
+        if (versionDumpFile is null) {
+            var pluginDirectory = new DirectoryInfo(Path.GetDirectoryName(Info.Location)!);
+            versionDumpFile = new FileInfo(Path.Combine(pluginDirectory.FullName, "version.txt"));
+        }
+
+        await using var versionDumpStream = new StreamWriter(versionDumpFile.FullName);
         await versionDumpStream.WriteLineAsync(versionString);
     }
 
