@@ -32,13 +32,13 @@
 !/libs
 
 ## Solution
-!repo-playground.sln
+!team-upgrades.sln
 
 ### Projects
-!/repo-playground
-/repo-playground/[Bb]in
-/repo-playground/[Oo]bj
-/repo-playground/[Dd]ist
+!/team-upgrades
+/team-upgrades/[Bb]in
+/team-upgrades/[Oo]bj
+/team-upgrades/[Dd]ist
 
 # Explicit exceptions/ignores
 **.user
