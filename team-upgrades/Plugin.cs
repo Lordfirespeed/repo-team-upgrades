@@ -59,6 +59,7 @@ public class Plugin : BaseUnityPlugin
             }
         }
 
+        #region Item upgrade patches
         [HarmonyPatch(typeof(ItemUpgradePlayerHealth))]
         static class ItemUpgradePlayerHealthPatches
         {
@@ -193,5 +194,6 @@ public class Plugin : BaseUnityPlugin
                 return false;
             }
         }
+        #endregion
     }
 }
