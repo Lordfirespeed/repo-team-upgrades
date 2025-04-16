@@ -63,5 +63,140 @@ public class Plugin : BaseUnityPlugin
                 instance.SetActive(true);
             }
         }
+
+        [HarmonyPatch(typeof(ItemUpgradePlayerHealth))]
+        static class ItemUpgradePlayerHealthPatches
+        {
+            [HarmonyPatch("Upgrade")]
+            [HarmonyPrefix]
+            static bool Upgrade_Prefix(ref ItemUpgradePlayerHealth __instance)
+            {
+                TeamUpgradesManager.Instance?.ApplyUpgrade(
+                    __instance.itemToggle.GetTogglingPlayerSteamId(),
+                    "playerUpgradeHealth"
+                );
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(ItemUpgradePlayerEnergy))]
+        static class ItemUpgradePlayerEnergyPatches
+        {
+            [HarmonyPatch("Upgrade")]
+            [HarmonyPrefix]
+            static bool Upgrade_Prefix(ref ItemUpgradePlayerEnergy __instance)
+            {
+                TeamUpgradesManager.Instance?.ApplyUpgrade(
+                    __instance.itemToggle.GetTogglingPlayerSteamId(),
+                    "playerUpgradeStamina"
+                );
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(ItemUpgradePlayerSprintSpeed))]
+        static class ItemUpgradePlayerSprintSpeedPatches
+        {
+            [HarmonyPatch("Upgrade")]
+            [HarmonyPrefix]
+            static bool Upgrade_Prefix(ref ItemUpgradePlayerSprintSpeed __instance)
+            {
+                TeamUpgradesManager.Instance?.ApplyUpgrade(
+                    __instance.itemToggle.GetTogglingPlayerSteamId(),
+                    "playerUpgradeSpeed"
+                );
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(ItemUpgradePlayerGrabStrength))]
+        static class ItemUpgradePlayerGrabStrengthPatches
+        {
+            [HarmonyPatch("Upgrade")]
+            [HarmonyPrefix]
+            static bool Upgrade_Prefix(ref ItemUpgradePlayerGrabStrength __instance)
+            {
+                TeamUpgradesManager.Instance?.ApplyUpgrade(
+                    __instance.itemToggle.GetTogglingPlayerSteamId(),
+                    "playerUpgradeStrength"
+                );
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(ItemUpgradePlayerGrabRange))]
+        static class ItemUpgradePlayerGrabRangePatches
+        {
+            [HarmonyPatch("Upgrade")]
+            [HarmonyPrefix]
+            static bool Upgrade_Prefix(ref ItemUpgradePlayerGrabRange __instance)
+            {
+                TeamUpgradesManager.Instance?.ApplyUpgrade(
+                    __instance.itemToggle.GetTogglingPlayerSteamId(),
+                    "playerUpgradeRange"
+                );
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(ItemUpgradePlayerGrabThrow))]
+        static class ItemUpgradePlayerGrabThrowPatches
+        {
+            [HarmonyPatch("Upgrade")]
+            [HarmonyPrefix]
+            static bool Upgrade_Prefix(ref ItemUpgradePlayerGrabThrow __instance)
+            {
+                TeamUpgradesManager.Instance?.ApplyUpgrade(
+                    __instance.itemToggle.GetTogglingPlayerSteamId(),
+                    "playerUpgradeThrow"
+                );
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(ItemUpgradePlayerTumbleLaunch))]
+        static class ItemUpgradePlayerTumbleLaunchPatches
+        {
+            [HarmonyPatch("Upgrade")]
+            [HarmonyPrefix]
+            static bool Upgrade_Prefix(ref ItemUpgradePlayerTumbleLaunch __instance)
+            {
+                TeamUpgradesManager.Instance?.ApplyUpgrade(
+                    __instance.itemToggle.GetTogglingPlayerSteamId(),
+                    "playerUpgradeLaunch"
+                );
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(ItemUpgradePlayerExtraJump))]
+        static class ItemUpgradePlayerExtraJumpPatches
+        {
+            [HarmonyPatch("Upgrade")]
+            [HarmonyPrefix]
+            static bool Upgrade_Prefix(ref ItemUpgradePlayerExtraJump __instance)
+            {
+                TeamUpgradesManager.Instance?.ApplyUpgrade(
+                    __instance.itemToggle.GetTogglingPlayerSteamId(),
+                    "playerUpgradeExtraJump"
+                );
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(ItemUpgradeMapPlayerCount))]
+        static class ItemUpgradeMapPlayerCountPatches
+        {
+            [HarmonyPatch("Upgrade")]
+            [HarmonyPrefix]
+            static bool Upgrade_Prefix(ref ItemUpgradeMapPlayerCount __instance)
+            {
+                TeamUpgradesManager.Instance?.ApplyUpgrade(
+                    __instance.itemToggle.GetTogglingPlayerSteamId(),
+                    "playerUpgradeMapPlayerCount"
+                );
+                return false;
+            }
+        }
     }
 }

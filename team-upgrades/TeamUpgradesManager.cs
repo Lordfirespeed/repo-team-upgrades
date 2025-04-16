@@ -7,10 +7,14 @@ namespace TeamUpgrades;
 
 public class TeamUpgradesManager : MonoBehaviour
 {
+    internal static TeamUpgradesManager? Instance { get; private set; }
+
     private PhotonView _photonView = null!;
 
     void Start()
     {
+        Instance = this;
+
         transform.parent = StatsManager.instance.transform;
         gameObject.name = "TeamUpgradesManager";
         gameObject.hideFlags &= ~HideFlags.HideAndDontSave;
@@ -108,6 +112,16 @@ public class TeamUpgradesManager : MonoBehaviour
 
             args.PlayerAvatar.upgradeMapPlayerCount += args.NewQuantity - args.OldQuantity;
         };
+    }
+
+    public void ApplyUpgrade(string playerSteamId, string playerUpgradeStatsKey)
+    {
+        if (!SemiFunc.IsMasterClient()) return;
+        var upgradeQuantities = StatsManager.instance.dictionaryOfDictionaries.GetValueOrDefault(playerUpgradeStatsKey, null);
+        if (upgradeQuantities is null) return;
+        var oldQuantity = upgradeQuantities[playerSteamId];
+
+        AssignUpgradeQuantity(playerSteamId, playerUpgradeStatsKey, oldQuantity + 1);
     }
 
     public event EventHandler<UpgradeQuantityChangedEventArgs>? UpgradeQuantityChanged;
