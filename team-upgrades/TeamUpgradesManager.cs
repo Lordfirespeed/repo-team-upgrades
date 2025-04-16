@@ -14,8 +14,6 @@ public class TeamUpgradesManager : MonoBehaviour
         transform.parent = StatsManager.instance.transform;
         gameObject.name = "TeamUpgradesManager";
         gameObject.hideFlags &= ~HideFlags.HideAndDontSave;
-        Plugin.Logger.LogInfo("I was alive (however briefly)");
-
         _photonView = GetComponent<PhotonView>();
     }
 
