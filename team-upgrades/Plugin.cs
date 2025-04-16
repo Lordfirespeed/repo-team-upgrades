@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using Photon.Pun;
 using TeamUpgrades.Extensions;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
-using static TeamUpgrades.UpgradesSynchronizer;
 
 namespace TeamUpgrades;
 
