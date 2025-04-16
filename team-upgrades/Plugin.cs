@@ -63,34 +63,5 @@ public class Plugin : BaseUnityPlugin
                 instance.SetActive(true);
             }
         }
-
-        [HarmonyPatch(typeof(RunManager))]
-        public static class RunManagerPatches
-        {
-            [HarmonyPatch("ChangeLevel")]
-            [HarmonyPrefix]
-            private static void ChangeLevel_Prefix()
-            {
-                SuppressExceptions<Exception>(SynchronizeUpgrades);
-            }
-        }
-
-        [HarmonyPatch(typeof(StatsManager))]
-        public static class StatsManagerPatches
-        {
-            [HarmonyPatch("ResetAllStats")]
-            [HarmonyPostfix]
-            private static void ResetAllStats_Postfix()
-            {
-                SuppressExceptions<Exception>(ResetPreviousMaxValues);
-            }
-
-            [HarmonyPatch("Update")]
-            [HarmonyPrefix]
-            private static void Update_Prefix()
-            {
-                SuppressExceptions<Exception>(SynchronizeUpgrades);
-            }
-        }
     }
 }
