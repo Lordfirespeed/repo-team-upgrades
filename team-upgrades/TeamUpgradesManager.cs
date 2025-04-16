@@ -45,8 +45,9 @@ public class TeamUpgradesManager : MonoBehaviour
     }
 
     [PunRPC]
-    public void AssignUpgradeQuantityRPC(string playerSteamId, string playerUpgradeStatsKey, int quantity)
+    public void AssignUpgradeQuantityRPC(string playerSteamId, string playerUpgradeStatsKey, int quantity, PhotonMessageInfo info)
     {
+        if (!info.Sender.IsMasterClient) return;
         AssignUpgradeQuantityImmediately(playerSteamId, playerUpgradeStatsKey, quantity);
     }
 
@@ -77,8 +78,9 @@ public class TeamUpgradesManager : MonoBehaviour
     }
 
     [PunRPC]
-    public void AssignUpgradeQuantityToAllPlayersRPC(string playerUpgradeStatsKey, int quantity)
+    public void AssignUpgradeQuantityToAllPlayersRPC(string playerUpgradeStatsKey, int quantity, PhotonMessageInfo info)
     {
+        if (!info.Sender.IsMasterClient) return;
         AssignUpgradeQuantityToAllPlayersImmediately(playerUpgradeStatsKey, quantity);
     }
 
