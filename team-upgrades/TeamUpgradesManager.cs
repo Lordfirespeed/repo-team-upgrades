@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Photon.Pun;
 using UnityEngine;
 
@@ -119,9 +120,17 @@ public class TeamUpgradesManager : MonoBehaviour
         if (!SemiFunc.IsMasterClient()) return;
         var upgradeQuantities = StatsManager.instance.dictionaryOfDictionaries.GetValueOrDefault(playerUpgradeStatsKey, null);
         if (upgradeQuantities is null) return;
-        var oldQuantity = upgradeQuantities[playerSteamId];
 
-        AssignUpgradeQuantity(playerSteamId, playerUpgradeStatsKey, oldQuantity + 1);
+        if (Plugin.DoTeamUpgrades)
+        {
+            var oldQuantity = upgradeQuantities.Values.Max();
+            AssignUpgradeQuantityToAllPlayers(playerUpgradeStatsKey, oldQuantity + 1);
+        }
+        else
+        {
+            var oldQuantity = upgradeQuantities[playerSteamId];
+            AssignUpgradeQuantity(playerSteamId, playerUpgradeStatsKey, oldQuantity + 1);
+        }
     }
 
     public event EventHandler<UpgradeQuantityChangedEventArgs>? UpgradeQuantityChanged;

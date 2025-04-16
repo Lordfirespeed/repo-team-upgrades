@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -15,6 +17,7 @@ public class Plugin : BaseUnityPlugin
 {
     internal static Plugin Instance { get; private set; } = null!;
     internal new static ManualLogSource Logger { get; private set; } = null!;
+    internal static readonly bool DoTeamUpgrades = true;
 
     public Plugin()
     {
@@ -56,6 +59,23 @@ public class Plugin : BaseUnityPlugin
                 var myPrefabId = $"{MyPluginInfo.PLUGIN_GUID}/TeamUpgradesManager";
                 var instance = PhotonNetwork.InstantiateRoomObject(myPrefabId, Vector3.zero, Quaternion.identity);
                 instance.SetActive(true);
+            }
+        }
+
+        [HarmonyPatch(typeof(StatsManager))]
+        static class StatsManagerPatches
+        {
+            [HarmonyPatch("PlayerAdd")]
+            [HarmonyPostfix]
+            static void OnPlayerAdd_Postfix(StatsManager __instance, object[] __args)
+            {
+                if (!DoTeamUpgrades) return;
+                if (__args[0] is not string playerSteamId) return;
+
+                foreach (Dictionary<string, int> dictionary in __instance.AllDictionariesWithPrefix("playerUpgrade"))
+                {
+                    dictionary[playerSteamId] = dictionary.Values.Max();
+                }
             }
         }
 
