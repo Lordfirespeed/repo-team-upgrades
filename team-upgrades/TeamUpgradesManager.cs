@@ -15,6 +15,99 @@ public class TeamUpgradesManager : MonoBehaviour
         gameObject.name = "TeamUpgradesManager";
         gameObject.hideFlags &= ~HideFlags.HideAndDontSave;
         _photonView = GetComponent<PhotonView>();
+
+        RegisterVanillaUpgradeQuantityChangedCallbacks();
+    }
+
+    private void RegisterVanillaUpgradeQuantityChangedCallbacks()
+    {
+        UpgradeQuantityChanged += (sender, args) =>
+        {
+            if (args.StatsKey != "playerUpgradeHealth") return;
+            if (!args.IsLocalPlayer) return;
+            if (args.NewQuantity == args.OldQuantity) return;
+
+            var quantityDelta = args.NewQuantity - args.OldQuantity;
+            args.PlayerAvatar.playerHealth.maxHealth += quantityDelta * 20;
+            if (quantityDelta > 0) args.PlayerAvatar.playerHealth.Heal(quantityDelta * 20, false);
+        };
+
+        UpgradeQuantityChanged += (sender, args) =>
+        {
+            if (args.StatsKey != "playerUpgradeStamina") return;
+            if (!args.IsLocalPlayer) return;
+            if (args.NewQuantity == args.OldQuantity) return;
+
+            var quantityDelta = args.NewQuantity - args.OldQuantity;
+            PlayerController.instance.EnergyStart += quantityDelta * 10f;
+            PlayerController.instance.EnergyCurrent = PlayerController.instance.EnergyStart;
+        };
+
+        UpgradeQuantityChanged += (sender, args) =>
+        {
+            if (args.StatsKey != "playerUpgradeSpeed") return;
+            if (!args.IsLocalPlayer) return;
+            if (args.NewQuantity == args.OldQuantity) return;
+
+            var quantityDelta = args.NewQuantity - args.OldQuantity;
+            PlayerController.instance.SprintSpeed += quantityDelta;
+            PlayerController.instance.SprintSpeedUpgrades += quantityDelta;
+        };
+
+        UpgradeQuantityChanged += (sender, args) =>
+        {
+            if (args.StatsKey != "playerUpgradeStrength") return;
+            if (!args.PlayerAvatar) return;
+            if (args.NewQuantity == args.OldQuantity) return;
+
+            var quantityDelta = args.NewQuantity - args.OldQuantity;
+            args.PlayerAvatar.physGrabber.grabStrength += quantityDelta * 0.2f;
+        };
+
+        UpgradeQuantityChanged += (sender, args) =>
+        {
+            if (args.StatsKey != "playerUpgradeRange") return;
+            if (!args.PlayerAvatar) return;
+            if (args.NewQuantity == args.OldQuantity) return;
+
+            args.PlayerAvatar.physGrabber.grabRange += args.NewQuantity - args.OldQuantity;
+        };
+
+        UpgradeQuantityChanged += (sender, args) =>
+        {
+            if (args.StatsKey != "playerUpgradeThrow") return;
+            if (!args.PlayerAvatar) return;
+            if (args.NewQuantity == args.OldQuantity) return;
+
+            var quantityDelta = args.NewQuantity - args.OldQuantity;
+            args.PlayerAvatar.physGrabber.throwStrength += quantityDelta * 0.3f;
+        };
+
+        UpgradeQuantityChanged += (sender, args) =>
+        {
+            if (args.StatsKey != "playerUpgradeLaunch") return;
+            if (args.NewQuantity == args.OldQuantity) return;
+
+            args.PlayerAvatar.tumble.tumbleLaunch += args.NewQuantity - args.OldQuantity;
+        };
+
+        UpgradeQuantityChanged += (sender, args) =>
+        {
+            if (args.StatsKey != "playerUpgradeExtraJump") return;
+            if (!args.IsLocalPlayer) return;
+            if (args.NewQuantity == args.OldQuantity) return;
+
+            PlayerController.instance.JumpExtra += args.NewQuantity - args.OldQuantity;
+        };
+
+        UpgradeQuantityChanged += (sender, args) =>
+        {
+            if (args.StatsKey != "playerUpgradeMapPlayerCount") return;
+            if (!args.IsLocalPlayer) return;
+            if (args.NewQuantity == args.OldQuantity) return;
+
+            args.PlayerAvatar.upgradeMapPlayerCount += args.NewQuantity - args.OldQuantity;
+        };
     }
 
     public event EventHandler<UpgradeQuantityChangedEventArgs>? UpgradeQuantityChanged;
@@ -23,13 +116,15 @@ public class TeamUpgradesManager : MonoBehaviour
     {
         var upgradeQuantities = StatsManager.instance.dictionaryOfDictionaries.GetValueOrDefault(playerUpgradeStatsKey, null);
         if (upgradeQuantities is null) return;
+        var oldQuantity = upgradeQuantities[playerSteamId];
         upgradeQuantities[playerSteamId] = quantity;
 
         var args = new UpgradeQuantityChangedEventArgs
         {
             PlayerSteamId = playerSteamId,
             StatsKey = playerUpgradeStatsKey,
-            Quantity = quantity,
+            OldQuantity = oldQuantity,
+            NewQuantity = quantity,
         };
         UpgradeQuantityChanged?.Invoke(null, args);
     }
@@ -56,12 +151,14 @@ public class TeamUpgradesManager : MonoBehaviour
 
         foreach (var playerSteamId in AllPlayerSteamIds)
         {
+            var oldQuantity = upgradeQuantities[playerSteamId];
             upgradeQuantities[playerSteamId] = quantity;
             var args = new UpgradeQuantityChangedEventArgs
             {
                 PlayerSteamId = playerSteamId,
                 StatsKey = playerUpgradeStatsKey,
-                Quantity = quantity,
+                OldQuantity = oldQuantity,
+                NewQuantity = quantity,
             };
             UpgradeQuantityChanged?.Invoke(null, args);
         }
