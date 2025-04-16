@@ -52,11 +52,11 @@ public class Plugin : BaseUnityPlugin
     class Patches
     {
         [HarmonyPatch(typeof(NetworkConnect))]
-        public static class NetworkConnectPatches
+        static class NetworkConnectPatches
         {
             [HarmonyPatch("OnCreatedRoom")]
             [HarmonyPostfix]
-            private static void OnCreatedRoom_Postfix()
+            static void OnCreatedRoom_Postfix()
             {
                 var myPrefabId = $"{MyPluginInfo.PLUGIN_GUID}/TeamUpgradesManager";
                 var instance = PhotonNetwork.InstantiateRoomObject(myPrefabId, Vector3.zero, Quaternion.identity);
