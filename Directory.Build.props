@@ -1,14 +1,42 @@
 <Project>
+    <Import Project="Sdk.props" Sdk="Sigurd.Thunderstore.Sdk" />
+
+    <!-- Compiler/MSBuild switches -->
     <PropertyGroup>
-        <Authors>Lordfirespeed</Authors>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/Lordfirespeed/repo-playground</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/Lordfirespeed/repo-playground</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
+        <NoWarn>$(NoWarn);1701;1702;0436</NoWarn>
     </PropertyGroup>
+
+    <!-- Target flags -->
+    <PropertyGroup>
+        <ClearCopyLocalPaths>true</ClearCopyLocalPaths>
+    </PropertyGroup>
+
+    <!-- Metadata -->
+    <PropertyGroup>
+        <Authors>Lordfirespeed</Authors>
+        <IsPackable>false</IsPackable>
+        <PackageProjectUrl>https://thunderstore.io/c/repo/p/Lordfirespeed/Team_Upgrades/</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Lordfirespeed/repo-team-upgrades</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
+    </PropertyGroup>
+
+    <!-- Thunderstore metadata (see https://github.com/lc-sigurd/msbuild-thunderstore-sdk) -->
+    <PropertyGroup>
+        <IsThunderstorePackable>false</IsThunderstorePackable>
+        <ThunderstoreNamespace>Lordfirespeed</ThunderstoreNamespace>
+        <ThunderstoreWebsiteUrl>$(RepositoryUrl)</ThunderstoreWebsiteUrl>
+        <ThunderstoreReadmePath>$(MSBuildProjectDirectory)/../README.md</ThunderstoreReadmePath>
+    </PropertyGroup>
+    <ItemGroup>
+        <ThunderstoreBuildCopyPath Include="$(ProjectDir)../LICENSE" Destination="/"/>
+        <ThunderstorePublishCommunity Include="repo" CategorySlugs="mods;serverside;clientside;upgrades"/>
+        <SetThunderstorePackageVersionTargetName Include="SetVersion" />
+    </ItemGroup>
 
     <!-- MinVer -->
     <PropertyGroup>

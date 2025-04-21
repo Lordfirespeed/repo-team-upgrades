@@ -1,7 +1,21 @@
 <Project>
-    <Target Name="SetPluginVersion" BeforeTargets="AddGeneratedFile" DependsOnTargets="MinVer">
+    <Import Project="Sdk.targets" Sdk="Sigurd.Thunderstore.Sdk" />
+
+    <!-- prevent referenced assemblies from being copied to output folders -->
+    <Target 
+        Name="ClearReferenceCopyLocalPaths"
+        AfterTargets="ResolveAssemblyReferences"
+        Condition="$(ClearCopyLocalPaths)"
+    >
+        <ItemGroup>
+            <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)"/>
+        </ItemGroup>
+    </Target>
+
+    <Target Name="SetVersion" BeforeTargets="AddGeneratedFile" DependsOnTargets="MinVer">
         <PropertyGroup>
             <BepInExPluginVersion>$(MinVerMajor).$(MinVerMinor).$(MinVerPatch)</BepInExPluginVersion>
+            <ThunderstorePackageVersion>$(MinVerMajor).$(MinVerMinor).$(MinVerPatch)</ThunderstorePackageVersion>
         </PropertyGroup>
     </Target>
 </Project>

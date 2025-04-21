@@ -4,23 +4,30 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <AssemblyName>dev.lordfirespeed.team_upgrades</AssemblyName>
         <Product>Lordfirespeed's Team Upgrades</Product>
-        <Description>Team upgrades. Done right.</Description>
+        <Description>Team upgrades, done right. Vanilla upgrades only. Everyone should have this installed.</Description>
 
         <RootNamespace>TeamUpgrades</RootNamespace>
     </PropertyGroup>
 
-    <!-- don't copy reference assemblies to the output folder -->
-    <Target Name="ClearReferenceCopyLocalPaths" AfterTargets="ResolveAssemblyReferences">
-        <ItemGroup>
-            <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)"/>
-        </ItemGroup>
-    </Target>
+    <!-- Thunderstore metadata (see https://github.com/lc-sigurd/msbuild-thunderstore-sdk) -->
+    <PropertyGroup>
+        <IsThunderstorePackable>true</IsThunderstorePackable>
+        <ThunderstoreName>Team_Upgrades</ThunderstoreName>
+        <ThunderstoreDescription>$(Description)</ThunderstoreDescription>
+        <ThunderstoreIconPath>$(ProjectDir)assets/icons/icon.png</ThunderstoreIconPath>
+        <HasBepInPlugin>true</HasBepInPlugin>
+    </PropertyGroup>
+    <ItemGroup>
+        <ThunderstoreBuildCopyPath Include="$(TargetPath)" Destination="BepInEx/plugins/$(ProjectName)/"/>
+        <ThunderstoreDependency Include="BepInEx-BepInExPack" Version="5.4.2100" Reference="false"/>
+        <ThunderstoreDependency Include="DaXcess-FixPluginTypesSerialization" Version="1.0.0" Reference="false"/>
+        <ThunderstoreDependency Include="Zehs-REPOLib" Version="2.0.1" Reference="false"/>
+    </ItemGroup>
 
     <!-- Development tools -->
     <ItemGroup>
         <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1" PrivateAssets="all"/>
         <PackageReference Include="BepInEx.Analyzers" Version="1.0.8" PrivateAssets="all"/>
-        <PackageReference Include="BepInEx.PluginInfoProps" Version="2.1.0" PrivateAssets="all"/>
         <PackageReference Include="PolySharp" Version="1.15.0" PrivateAssets="all"/>
     </ItemGroup>
 
