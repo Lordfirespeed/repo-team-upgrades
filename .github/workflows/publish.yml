@@ -11,19 +11,7 @@ defaults:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Fetch Sources
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.release.tag_name }}
-          fetch-depth: 0
-          filter: tree:0
-          submodules: recursive
-
-      - uses: ./.github/actions/build
-        with:
-          nuget-package: ${{ vars.NUGET_PACKAGE }}
+    uses: './.github/workflows/build.yml'
 
   upload-release-artifacts:
     name: Upload Release Artifacts
