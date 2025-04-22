@@ -32,6 +32,36 @@ jobs:
           filter: tree:0
           submodules: recursive
 
-      - uses: ./.github/actions/build
+      - name: Setup .NET environment
+        uses: actions/setup-dotnet@v4
         with:
-          nuget-package: ${{ vars.NUGET_PACKAGE }}
+          dotnet-version: "9.0.104"
+
+      - name: Restore project
+        run: |
+          dotnet restore
+          dotnet tool restore
+
+      - name: Build solution
+        run: |
+          dotnet build -c Release
+
+      - name: Pack solution
+        if: ${{ vars.NUGET_PACKAGE == 'true' }}
+        run: |
+          dotnet pack -c Release --no-build
+
+      - name: Upload thunderstore artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: thunderstore-build
+          path: |
+            ./*/assets/thunderstore.toml.user
+            ./*/bin/Release/netstandard2.1/dist/*.zip
+
+      - name: Upload nupkg artifact
+        if: ${{ vars.NUGET_PACKAGE == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: nupkg-build
+          path: ./*/bin/Release/*.nupkg
