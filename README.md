@@ -11,14 +11,15 @@ A `R.E.P.O` mod for applying upgrades to all players.
 
 The others don't work.
 
-- [EvilCheetah's Team Upgrades](https://thunderstore.io/c/repo/p/EvilCheetah/TeamUpgrades/): Doesn't apply upgrades
-  to players that 'late join' a save.
-- [Traktool's Shared Upgrades](https://thunderstore.io/c/repo/p/Traktool/SharedUpgrades/): Doesn't apply upgrades
-  to players that 'late join' a save until a level is completed.
+- [EvilCheetah's Team Upgrades](https://thunderstore.io/c/repo/p/EvilCheetah/TeamUpgrades/):
+  - Doesn't apply upgrades to players that 'late join' a saved game.
+- [Traktool's Shared Upgrades](https://thunderstore.io/c/repo/p/Traktool/SharedUpgrades/):
+  - Doesn't apply upgrades to players that 'late join' a saved game until a level is completed.
+  - Health upgrades don't heal all players, only the player that applied the upgrade.
 - [NastyPablo's LateJoinSharedUpgrades](https://thunderstore.io/c/repo/p/NastyPablo/LateJoinSharedUpgradesByNastyPablo/):
-  Newly purchased upgrades are duplicated for 1 level, because player upgrade quantities are set to purchase quantities
-  *before* upgrade items have been applied.
-- All of the above: Health upgrades don't heal all players, only the player that applied the upgrade.
+  - Newly purchased upgrades are duplicated for 1 level, because player upgrade quantities are set to purchase quantities
+    *before* upgrade items have been applied.
+  - Health upgrades don't heal all players, only the player that applied the upgrade.
 
 ## How's it work?
 
