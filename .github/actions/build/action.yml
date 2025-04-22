@@ -1,0 +1,45 @@
+name: 'Build'
+description: 'Build solution and upload artifacts'
+inputs:
+  nuget-package:
+    description: 'whether to pack + upload NuGet packages'
+    default: 'false'
+runs:
+  using: composite
+  steps:
+    - name: Setup .NET environment
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: "9.0.104"
+
+    - name: Restore project
+      shell: bash
+      run: |
+        dotnet restore
+        dotnet tool restore
+
+    - name: Build solution
+      shell: bash
+      run: |
+        dotnet build -c Release
+
+    - name: Pack solution
+      shell: bash
+      if: inputs.nuget-package == 'true'
+      run: |
+        dotnet pack -c Release --no-build
+
+    - name: Upload thunderstore artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: thunderstore-build
+        path: |
+          ./*/assets/thunderstore.toml.user
+          ./*/bin/Release/netstandard2.1/dist/*.zip
+
+    - name: Upload nupkg artifact
+      if: inputs.nuget-package == 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: nupkg-build
+        path: ./*/bin/Release/*.nupkg
