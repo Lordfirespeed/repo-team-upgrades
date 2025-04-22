@@ -12,6 +12,8 @@ jobs:
   build:
     name: Build
     uses: './.github/workflows/build.yml'
+    with:
+      ref: ${{ github.event.release.tag_name }}
 
   upload-release-artifacts:
     name: Upload Release Artifacts
