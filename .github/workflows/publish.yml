@@ -10,7 +10,6 @@ defaults:
 
 jobs:
   build:
-    name: Build
     uses: './.github/workflows/build.yml'
     with:
       ref: ${{ github.event.release.tag_name }}
