@@ -10,8 +10,6 @@ on:
 defaults:
   run:
     shell: bash
-env:
-  NUGET_PACKAGE: false
 
 jobs:
   build:
@@ -27,4 +25,4 @@ jobs:
 
       - uses: ./.github/actions/build
         with:
-          nuget-package: ${{ env.NUGET_PACKAGE }}
+          nuget-package: ${{ vars.NUGET_PACKAGE }}

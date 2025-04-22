@@ -7,8 +7,6 @@ on:
 defaults:
   run:
     shell: bash
-env:
-  NUGET_PACKAGE: false
 
 jobs:
   build:
@@ -25,7 +23,7 @@ jobs:
 
       - uses: ./.github/actions/build
         with:
-          nuget-package: ${{ env.NUGET_PACKAGE }}
+          nuget-package: ${{ vars.NUGET_PACKAGE }}
 
   upload-release-artifacts:
     name: Upload Release Artifacts
@@ -50,7 +48,7 @@ jobs:
 
   deploy-nuget:
     name: Deploy to NuGet
-    if: env.NUGET_PACKAGE == 'true'
+    if: ${{ vars.NUGET_PACKAGE == 'true' }}
     needs: build
     runs-on: ubuntu-latest
     steps:
