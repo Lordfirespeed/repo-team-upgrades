@@ -20,6 +20,20 @@ The others don't work.
   - Newly purchased upgrades are duplicated for 1 level, because player upgrade quantities are set to purchase quantities
     *before* upgrade items have been applied.
   - Health upgrades don't heal all players, only the player that applied the upgrade.
+- [SharkLucas' SyncHostUpgrades](https://thunderstore.io/c/repo/p/SharkLucas/SyncHostUpgrades/):
+  - Checks for necessary updates **every frame**, which is hugely wasteful.
+  - Doesn't implement own RPCs.
+- [hairo's SharedUpgrades](https://thunderstore.io/c/repo/p/hairo/SharedUpgrades/):
+  - Doesn't assign upgrades to players that late-join a saved game.
+  - Doesn't implement own RPCs.
+- [FluxTeam's SharingIsCaring](https://thunderstore.io/c/repo/p/FluxTeam/SharingIsCaring/):
+  - Checks for necessary updates every 5 seconds (by default, configurable interval), which is wasteful.
+- [DuckyVR's UpgradesForAll](https://thunderstore.io/c/repo/p/DuckyVR/UpgradesForAll/):
+  - Doesn't assign upgrades to players that late-join a saved game
+  - Doesn't implement own RPCs.
+- [TGO's SyncUpgrades](https://thunderstore.io/c/repo/p/TGO/SyncUpgrades/):
+  - Doesn't implement own RPCs.
+  - To apply 1 upgrade, all upgrade quantities are re-sent to all players over the network, which is wasteful.
 
 ## How's it work?
 
