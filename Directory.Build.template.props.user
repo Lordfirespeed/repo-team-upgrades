@@ -7,5 +7,6 @@
         <RepoDir>$(HOME)/.steam/debian-installation/steamapps/common/REPO/</RepoDir>
         <TestProfileDir>$(HOME)/.config/r2modmanPlus-local/REPO/profiles/Test REPO Playground</TestProfileDir>
         -->
+        <ShouldCopyToTestProfile>false</ShouldCopyToTestProfile>
     </PropertyGroup>
 </Project>
