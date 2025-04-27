@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -215,5 +217,44 @@ public class Plugin : BaseUnityPlugin
             }
         }
         #endregion
+
+        [HarmonyPatch(typeof(PhysGrabber))]
+        static class PhysGrabberPatches
+        {
+            [HarmonyPatch(nameof(PhysGrabber.LateStart), MethodType.Enumerator)]
+            [HarmonyTranspiler]
+            static IEnumerable<CodeInstruction> LateStart_MoveNext_Transpiler(IEnumerable<CodeInstruction> instructions)
+            {
+                var matcher = new CodeMatcher(instructions);
+
+                matcher.MatchForward(false, [
+                    new CodeMatch(OpCodes.Ldsfld, typeof(StatsManager).GetField(nameof(StatsManager.instance))),
+                    new CodeMatch(OpCodes.Ldfld, typeof(StatsManager).GetField(nameof(StatsManager.playerUpgradeStrength))),
+                    new CodeMatch(OpCodes.Ldarg_0),
+                    new CodeMatch((instr) => instr.opcode == OpCodes.Ldfld),
+                    new CodeMatch(OpCodes.Callvirt, typeof(Dictionary<string, int>).GetMethod(nameof(Dictionary<string, int>.ContainsKey))),
+                    new CodeMatch((instr) => instr.opcode == OpCodes.Brfalse),
+                ]);
+                if (matcher.IsInvalid) throw new InvalidOperationException();
+                if (matcher.InstructionAt(3).operand is not FieldInfo steamIdLocalField) throw new InvalidOperationException();
+                if (matcher.InstructionAt(5).operand is not Label waitLabel) throw new InvalidOperationException();
+
+                matcher.InsertAndAdvance([
+                    new CodeInstruction(OpCodes.Ldarg_0),
+                    new CodeInstruction(OpCodes.Ldloc_1),
+                    new CodeInstruction(OpCodes.Ldfld, typeof(PhysGrabber).GetField(nameof(PhysGrabber.playerAvatar))),
+                    new CodeInstruction(OpCodes.Call, typeof(SemiFunc).GetMethod(nameof(SemiFunc.PlayerGetSteamID))),
+                    new CodeInstruction(OpCodes.Stfld, steamIdLocalField),
+                    new CodeInstruction(OpCodes.Ldarg_0),
+                    new CodeInstruction(OpCodes.Ldfld, steamIdLocalField),
+                    new CodeInstruction(OpCodes.Brfalse, waitLabel),
+                ]);
+                matcher.Instruction.MoveLabelsTo(matcher.InstructionAt(-8));
+
+                Logger.LogDebugInstructionsFrom(matcher);
+
+                return matcher.InstructionEnumeration();
+            }
+        }
     }
 }
