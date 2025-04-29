@@ -22,6 +22,7 @@ public class TeamUpgradesManager : MonoBehaviour
         _photonView = GetComponent<PhotonView>();
 
         RegisterVanillaUpgradeQuantityChangedCallbacks();
+        RegisterREPOLibUpgradeQuantityChangedCallbacks();
     }
 
     private void RegisterVanillaUpgradeQuantityChangedCallbacks()
@@ -112,6 +113,19 @@ public class TeamUpgradesManager : MonoBehaviour
             if (args.NewQuantity == args.OldQuantity) return;
 
             args.PlayerAvatar.upgradeMapPlayerCount += args.NewQuantity - args.OldQuantity;
+        };
+    }
+
+    private void RegisterREPOLibUpgradeQuantityChangedCallbacks()
+    {
+        UpgradeQuantityChanged += (sender, args) => {
+            if (!args.StatsKey.StartsWith("playerUpgrade")) return;
+            var upgradeIdentifier = args.StatsKey["playerUpgrade".Length..];
+            if (!REPOLib.Modules.Upgrades.TryGetUpgrade(upgradeIdentifier, out var upgrade)) return;
+            if (upgrade._upgradeAction is null) return;
+            if (!args.PlayerAvatar) return;
+
+            upgrade._upgradeAction(args.PlayerAvatar, args.NewQuantity);
         };
     }
 
