@@ -28,9 +28,13 @@ public class TeamUpgradesManager : MonoBehaviour
     {
         UpgradeQuantityChanged += (sender, args) =>
         {
+            // vanilla checks
             if (args.StatsKey != "playerUpgradeHealth") return;
             if (!args.IsLocalPlayer) return;
+
+            // modded checks
             if (args.NewQuantity == args.OldQuantity) return;
+            if (!args.PlayerAvatar) return;
 
             var quantityDelta = args.NewQuantity - args.OldQuantity;
             args.PlayerAvatar.playerHealth.maxHealth += quantityDelta * 20;
@@ -39,9 +43,13 @@ public class TeamUpgradesManager : MonoBehaviour
 
         UpgradeQuantityChanged += (sender, args) =>
         {
+            // vanilla checks
             if (args.StatsKey != "playerUpgradeStamina") return;
             if (!args.IsLocalPlayer) return;
+
+            // modded checks
             if (args.NewQuantity == args.OldQuantity) return;
+            if (!PlayerController.instance) return;
 
             var quantityDelta = args.NewQuantity - args.OldQuantity;
             PlayerController.instance.EnergyStart += quantityDelta * 10f;
@@ -50,9 +58,13 @@ public class TeamUpgradesManager : MonoBehaviour
 
         UpgradeQuantityChanged += (sender, args) =>
         {
+            // vanilla checks
             if (args.StatsKey != "playerUpgradeSpeed") return;
             if (!args.IsLocalPlayer) return;
+
+            // modded checks
             if (args.NewQuantity == args.OldQuantity) return;
+            if (!PlayerController.instance) return;
 
             var quantityDelta = args.NewQuantity - args.OldQuantity;
             PlayerController.instance.SprintSpeed += quantityDelta;
@@ -61,8 +73,11 @@ public class TeamUpgradesManager : MonoBehaviour
 
         UpgradeQuantityChanged += (sender, args) =>
         {
+            // vanilla checks
             if (args.StatsKey != "playerUpgradeStrength") return;
             if (!args.PlayerAvatar) return;
+
+            // modded checks
             if (args.NewQuantity == args.OldQuantity) return;
 
             var quantityDelta = args.NewQuantity - args.OldQuantity;
@@ -71,8 +86,11 @@ public class TeamUpgradesManager : MonoBehaviour
 
         UpgradeQuantityChanged += (sender, args) =>
         {
+            // vanilla checks
             if (args.StatsKey != "playerUpgradeRange") return;
             if (!args.PlayerAvatar) return;
+
+            // modded checks
             if (args.NewQuantity == args.OldQuantity) return;
 
             args.PlayerAvatar.physGrabber.grabRange += args.NewQuantity - args.OldQuantity;
@@ -80,8 +98,11 @@ public class TeamUpgradesManager : MonoBehaviour
 
         UpgradeQuantityChanged += (sender, args) =>
         {
+            // vanilla checks
             if (args.StatsKey != "playerUpgradeThrow") return;
             if (!args.PlayerAvatar) return;
+
+            // modded checks
             if (args.NewQuantity == args.OldQuantity) return;
 
             var quantityDelta = args.NewQuantity - args.OldQuantity;
@@ -90,26 +111,38 @@ public class TeamUpgradesManager : MonoBehaviour
 
         UpgradeQuantityChanged += (sender, args) =>
         {
+            // vanilla checks
             if (args.StatsKey != "playerUpgradeLaunch") return;
+
+            // modded checks
             if (args.NewQuantity == args.OldQuantity) return;
+            if (!args.PlayerAvatar) return;
 
             args.PlayerAvatar.tumble.tumbleLaunch += args.NewQuantity - args.OldQuantity;
         };
 
         UpgradeQuantityChanged += (sender, args) =>
         {
+            // vanilla checks
             if (args.StatsKey != "playerUpgradeExtraJump") return;
             if (!args.IsLocalPlayer) return;
+
+            // modded checks
             if (args.NewQuantity == args.OldQuantity) return;
+            if (!PlayerController.instance) return;
 
             PlayerController.instance.JumpExtra += args.NewQuantity - args.OldQuantity;
         };
 
         UpgradeQuantityChanged += (sender, args) =>
         {
+            // vanilla checks
             if (args.StatsKey != "playerUpgradeMapPlayerCount") return;
             if (!args.IsLocalPlayer) return;
+
+            // modded checks
             if (args.NewQuantity == args.OldQuantity) return;
+            if (!args.PlayerAvatar) return;
 
             args.PlayerAvatar.upgradeMapPlayerCount += args.NewQuantity - args.OldQuantity;
         };
