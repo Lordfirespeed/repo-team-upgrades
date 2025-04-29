@@ -34,6 +34,7 @@ public class TeamUpgradesManager : MonoBehaviour
 
             // modded checks
             if (args.NewQuantity == args.OldQuantity) return;
+            if (!args.PlayerAvatar) return;
 
             var quantityDelta = args.NewQuantity - args.OldQuantity;
             args.PlayerAvatar.playerHealth.maxHealth += quantityDelta * 20;
@@ -48,6 +49,7 @@ public class TeamUpgradesManager : MonoBehaviour
 
             // modded checks
             if (args.NewQuantity == args.OldQuantity) return;
+            if (!PlayerController.instance) return;
 
             var quantityDelta = args.NewQuantity - args.OldQuantity;
             PlayerController.instance.EnergyStart += quantityDelta * 10f;
@@ -62,6 +64,7 @@ public class TeamUpgradesManager : MonoBehaviour
 
             // modded checks
             if (args.NewQuantity == args.OldQuantity) return;
+            if (!PlayerController.instance) return;
 
             var quantityDelta = args.NewQuantity - args.OldQuantity;
             PlayerController.instance.SprintSpeed += quantityDelta;
@@ -113,6 +116,7 @@ public class TeamUpgradesManager : MonoBehaviour
 
             // modded checks
             if (args.NewQuantity == args.OldQuantity) return;
+            if (!args.PlayerAvatar) return;
 
             args.PlayerAvatar.tumble.tumbleLaunch += args.NewQuantity - args.OldQuantity;
         };
@@ -125,6 +129,7 @@ public class TeamUpgradesManager : MonoBehaviour
 
             // modded checks
             if (args.NewQuantity == args.OldQuantity) return;
+            if (!PlayerController.instance) return;
 
             PlayerController.instance.JumpExtra += args.NewQuantity - args.OldQuantity;
         };
@@ -137,6 +142,7 @@ public class TeamUpgradesManager : MonoBehaviour
 
             // modded checks
             if (args.NewQuantity == args.OldQuantity) return;
+            if (!args.PlayerAvatar) return;
 
             args.PlayerAvatar.upgradeMapPlayerCount += args.NewQuantity - args.OldQuantity;
         };
