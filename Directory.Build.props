@@ -3,6 +3,7 @@
 
     <!-- Compiler/MSBuild switches -->
     <PropertyGroup>
+        <NeutralLanguage>en-GB</NeutralLanguage>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
