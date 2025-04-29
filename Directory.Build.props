@@ -8,6 +8,7 @@
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <NoWarn>$(NoWarn);1701;1702;0436</NoWarn>
+        <DebugType>embedded</DebugType>
     </PropertyGroup>
 
     <!-- Target flags -->
