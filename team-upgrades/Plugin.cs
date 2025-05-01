@@ -8,6 +8,7 @@ using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using Photon.Pun;
+using REPOLib.Modules;
 using TeamUpgrades.Extensions;
 using UnityEngine;
 
@@ -212,6 +213,21 @@ public class Plugin : BaseUnityPlugin
                 TeamUpgradesManager.Instance?.ApplyUpgrade(
                     __instance.itemToggle.GetTogglingPlayerSteamId(),
                     "playerUpgradeMapPlayerCount"
+                );
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(REPOLibItemUpgrade))]
+        static class REPOLibItemUpgradePatches
+        {
+            [HarmonyPatch(nameof(REPOLibItemUpgrade.Upgrade))]
+            [HarmonyPrefix]
+            static bool Upgrade_Prefix(ref REPOLibItemUpgrade __instance)
+            {
+                TeamUpgradesManager.Instance?.ApplyUpgrade(
+                    __instance._itemToggle.GetTogglingPlayerSteamId(),
+                    $"playerUpgrade{__instance.UpgradeId}"
                 );
                 return false;
             }
