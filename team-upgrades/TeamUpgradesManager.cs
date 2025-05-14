@@ -16,7 +16,7 @@ public class TeamUpgradesManager : MonoBehaviour
     {
         Instance = this;
 
-        transform.parent = StatsManager.instance.transform;
+        transform.parent = PunManager.instance.transform;
         gameObject.name = "TeamUpgradesManager";
         gameObject.hideFlags &= ~HideFlags.HideAndDontSave;
         _photonView = GetComponent<PhotonView>();

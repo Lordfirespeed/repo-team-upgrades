@@ -11,6 +11,7 @@ using Photon.Pun;
 using REPOLib.Modules;
 using TeamUpgrades.Extensions;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace TeamUpgrades;
 
@@ -21,6 +22,8 @@ public class Plugin : BaseUnityPlugin
     internal static Plugin Instance { get; private set; } = null!;
     internal new static ManualLogSource Logger { get; private set; } = null!;
     internal static readonly bool DoTeamUpgrades = true;
+
+    internal const string MainScenePath = "Assets/Scenes/Main/Main.unity";
 
     public Plugin()
     {
@@ -34,16 +37,30 @@ public class Plugin : BaseUnityPlugin
     {
         Logger = base.Logger;
 
+        GameObject myPrefabContainer = new GameObject("TeamUpgradesPrefabContainer") {
+            hideFlags = HideFlags.HideAndDontSave,
+        };
+        myPrefabContainer.SetActive(false);
+
         GameObject myPrefab = new GameObject("TeamUpgradesManagerPrefab")
         {
             hideFlags = HideFlags.HideAndDontSave,
         };
-        myPrefab.SetActive(false);
+        myPrefab.transform.parent = myPrefabContainer.transform;
         myPrefab.AddComponent<PhotonView>();
         myPrefab.AddComponent<TeamUpgradesManager>();
 
-        var myPrefabId = $"{MyPluginInfo.PLUGIN_GUID}/TeamUpgradesManager";
-        REPOLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(myPrefabId, myPrefab);
+        var myPrefabId = $"{MyPluginInfo.PLUGIN_GUID}/team-upgrades-manager";
+        NetworkPrefabs.RegisterNetworkPrefab(myPrefabId, myPrefab);
+
+        SceneManager.sceneLoaded += (scene, loadSceneMode) => {
+            if (scene.path != MainScenePath) return;
+            if (!SemiFunc.IsMultiplayer()) return;
+            if (!SemiFunc.IsMasterClient()) return;
+            if (TeamUpgradesManager.Instance != null) return;
+
+            PhotonNetwork.InstantiateRoomObject(myPrefabId, Vector3.zero, Quaternion.identity);
+        };
 
         var harmony = new Harmony(Info.Metadata.GUID);
         harmony.PatchAllNestedTypes(typeof(Patches));
@@ -52,19 +69,6 @@ public class Plugin : BaseUnityPlugin
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     class Patches
     {
-        [HarmonyPatch(typeof(NetworkConnect))]
-        static class NetworkConnectPatches
-        {
-            [HarmonyPatch("OnCreatedRoom")]
-            [HarmonyPostfix]
-            static void OnCreatedRoom_Postfix()
-            {
-                var myPrefabId = $"{MyPluginInfo.PLUGIN_GUID}/TeamUpgradesManager";
-                var instance = PhotonNetwork.InstantiateRoomObject(myPrefabId, Vector3.zero, Quaternion.identity);
-                instance.SetActive(true);
-            }
-        }
-
         [HarmonyPatch(typeof(StatsManager))]
         static class StatsManagerPatches
         {
